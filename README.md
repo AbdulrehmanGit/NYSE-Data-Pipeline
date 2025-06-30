@@ -1,10 +1,10 @@
-📈 NYSE Data Engineering Pipeline
+# 📈 NYSE Data Engineering Pipeline
 A comprehensive end-to-end batch data pipeline for ingesting, transforming, and visualizing New York Stock Exchange (NYSE) data using a modern data engineering stack including Polygon.io, PySpark, PostgreSQL, Parquet, HDFS, Hive, and Power BI.
 
-📂 Project Structure
-graphql
-Copy
-Edit
+---
+
+## 📂 Project Structure
+```text
 NYSE-Data-Pipeline/
 │
 ├── ingestion/
@@ -33,81 +33,89 @@ NYSE-Data-Pipeline/
 ├── .env                                # Environment config (excluded in .gitignore)
 ├── run_pipeline.py                     # Master orchestration script
 └── README.md
-⚙️ Technologies Used
-Python & PySpark – For extraction, transformation, and orchestration
+```
+---
 
-Polygon.io API – Real-time and historical financial market data
+## ⚙️ Technologies Used
+- Python & PySpark – For extraction, transformation, and orchestration
 
-PostgreSQL – Used as both staging and warehouse storage
+- Polygon.io API – Real-time and historical financial market data
 
-Parquet – Optimized file format for export and analysis
+- PostgreSQL – Used as both staging and warehouse storage
 
-HDFS (Cloudera) – Distributed file system for storage
+- Parquet – Optimized file format for export and analysis
 
-Hive – External tables built over HDFS for query access
+- HDFS (Cloudera) – Distributed file system for storage
 
-Power BI – Business intelligence and visualization
+- Hive – External tables built over HDFS for query access
 
-🔁 Project Workflow
-1. Ingestion Layer
-extract_tickers_json.py and extract_dailyprice_json.py request data from the Polygon.io API.
+- Power BI – Business intelligence and visualization
 
-JSON files are saved locally under data/raw/.
+---
 
-2. Staging Layer
-loading_ticker_json.py and loading_daily_price_json.py load data into staging tables in PostgreSQL using psycopg2 or SQLAlchemy.
+## 🔁 Project Workflow
+### 1. Ingestion Layer
+- extract_tickers_json.py and extract_dailyprice_json.py request data from the Polygon.io API.
 
-3. Transformation Layer
-transform.py reads staging data using PySpark, applies business rules and deduplication, and loads dimension and fact tables (dim_ticker, dim_date, fact_daily_price) into the data warehouse (PostgreSQL schema: nyse_dw).
+- JSON files are saved locally under data/raw/.
 
-Data is also written to Parquet files for each table and saved under data/prepared/.
+### 2. Staging Layer
+- loading_ticker_json.py and loading_daily_price_json.py load data into staging tables in PostgreSQL using psycopg2 or SQLAlchemy.
 
-4. Export to HDFS
+### 3. Transformation Layer
+- transform.py reads staging data using PySpark, applies business rules and deduplication, and loads dimension and fact tables (dim_ticker, dim_date, fact_daily_price) into the data warehouse (PostgreSQL schema: nyse_dw).
+
+- Data is also written to Parquet files for each table and saved under data/prepared/.
+
+### 4. Export to HDFS
 move_to_hdfs.py uses SCP and SSH to:
 
-Transfer Parquet files from local machine to Cloudera VM.
+- Transfer Parquet files from local machine to Cloudera VM.
 
-Move those files into HDFS using hdfs dfs -put.
+- Move those files into HDFS using hdfs dfs -put.
 
 Paths:
-
 /home/cloudera/NYSE/... → /user/cloudera/nyse/...
 
-5. Hive External Tables
-External Hive tables are created pointing to HDFS directories. These tables are used by Power BI for analysis.
+### 5. Hive External Tables
+- External Hive tables are created pointing to HDFS directories. These tables are used by Power BI for analysis.
 
-6. Power BI Dashboard
+### 6. Power BI Dashboard
 The final dataset is visualized in Power BI:
 
-Time-series trends (OHLCV)
+- Time-series trends (OHLCV)
 
-Price comparisons (Max Date vs. Prior Date)
+- Price comparisons (Max Date vs. Prior Date)
 
-Volume trends
+- Volume trends
 
-Derived measures using DAX
+- Derived measures using DAX
 
-🚀 How to Run
+---
+
+## 🚀 How to Run
 Set up your .env file with database and SSH configs.
 
 Run the full pipeline using:
 
-bash
-Copy
-Edit
-python run_pipeline.py
-All steps will execute in sequence and log to logs/pipeline.log.
+- bash
+- Copy
+- Edit
+- python run_pipeline.py
+- All steps will execute in sequence and log to logs/pipeline.log.
 
-📊 Dashboard Highlights (Power BI)
-Daily Close Trends
+---
 
-High vs. Low Price Ranges
+## 📊 Dashboard Highlights (Power BI)
+- Daily Close Trends
 
-Close Price Comparison: Max Date vs. Prior Date
+- High vs. Low Price Ranges
 
-Volume Movement Patterns
+- Close Price Comparison: Max Date vs. Prior Date
 
-Rolling averages (7-day, 30-day)
+- Volume Movement Patterns
 
-Trend KPIs and DAX Measures
+- Rolling averages (7-day, 30-day)
+
+- Trend KPIs and DAX Measures
 
